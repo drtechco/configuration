@@ -319,8 +319,8 @@ func (p *Config) AddConfigWithTextFallback(config *Config, textFallback string) 
 	return config.WithFallback(fallbackConfig)
 }
 
-func (p Config) String() string {
-	return p.root.String()
+func (p Config) String(faceQuote bool) string {
+	return p.root.String(faceQuote)
 }
 
 func splitDottedPathHonouringQuotes(path string) []string {

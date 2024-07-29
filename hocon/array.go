@@ -28,10 +28,10 @@ func (p *HoconArray) GetArray() []*HoconValue {
 	return p.values
 }
 
-func (p *HoconArray) String() string {
+func (p *HoconArray) String(faceQuote bool) string {
 	var strs []string
 	for _, v := range p.values {
-		strs = append(strs, v.String())
+		strs = append(strs, v.String(faceQuote))
 	}
 	return "[" + strings.Join(strs, ",") + "]"
 }

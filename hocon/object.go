@@ -81,17 +81,17 @@ func (p *HoconObject) IsString() bool {
 	return false
 }
 
-func (p *HoconObject) String() string {
-	return p.ToString(0)
+func (p *HoconObject) String(faceQuote bool) string {
+	return p.ToString(0, faceQuote)
 }
 
-func (p *HoconObject) ToString(indent int) string {
+func (p *HoconObject) ToString(indent int, faceQuote bool) string {
 	tmp := strings.Repeat(" ", indent*2)
 	buf := bytes.NewBuffer(nil)
 	for _, k := range p.keys {
 		key := p.quoteIfNeeded(k)
 		v := p.items[key]
-		buf.WriteString(fmt.Sprintf("%s%s : %s\r\n", tmp, key, v.ToString(indent)))
+		buf.WriteString(fmt.Sprintf("%s%s : %s\r\n", tmp, key, v.ToString(indent, faceQuote)))
 	}
 	return buf.String()
 }

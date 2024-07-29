@@ -172,24 +172,24 @@ func (p *HoconValue) GetByteSize() *big.Int {
 	return nil
 }
 
-func (p *HoconValue) String() string {
-	return p.ToString(0)
+func (p *HoconValue) String(faceQuote bool) string {
+	return p.ToString(0, faceQuote)
 }
 
-func (p *HoconValue) ToString(indent int) string {
+func (p *HoconValue) ToString(indent int, faceQuote bool) string {
 	if p.IsString() {
-		return p.quoteIfNeeded(p.GetString())
+		return p.quoteIfNeeded(p.GetString(), faceQuote)
 	}
 
 	if p.IsObject() {
 		tmp := strings.Repeat(" ", indent*2)
-		return fmt.Sprintf("{\r\n%s%s}", p.GetObject().ToString(indent+1), tmp)
+		return fmt.Sprintf("{\r\n%s%s}", p.GetObject().ToString(indent+1, faceQuote), tmp)
 	}
 
 	if p.IsArray() {
 		var strs []string
 		for _, item := range p.GetArray() {
-			strs = append(strs, item.ToString(indent+1))
+			strs = append(strs, item.ToString(indent+1, faceQuote))
 		}
 		return "[" + strings.Join(strs, ",") + "]"
 	}
@@ -430,12 +430,12 @@ func (p *HoconValue) GetTimeDuration(allowInfinite bool) time.Duration {
 	return time.Duration(float64(time.Millisecond) * parsePositiveValue(res))
 }
 
-func (p *HoconValue) quoteIfNeeded(text string) string {
+func (p *HoconValue) quoteIfNeeded(text string, face bool) string {
 	if len(text) == 0 {
 		return "\"\""
 	}
 
-	if strings.IndexByte(text, ' ') >= 0 ||
+	if face || strings.IndexByte(text, ' ') >= 0 ||
 		strings.IndexByte(text, '\t') >= 0 {
 		return "\"" + text + "\""
 	}
